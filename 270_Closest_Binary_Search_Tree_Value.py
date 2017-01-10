@@ -22,6 +22,18 @@
 - check diff or left
 - if children and if R or L is less go there else return
 
+====================SECOND TRY===================
+
+I incorrectly rmembered the BST properties
+
+New approach:
+
+- Get half of all elements of the BST and sort them, then do a scan of the elements to see which diff is the least
+    - o(n) + O(nlogn) + O(n) = O(n) + O(nlogn)
+
+
+
+
 """
 
 class Solution(object):
@@ -31,7 +43,7 @@ class Solution(object):
         :type target: float
         :rtype: int
         """
-        return_val = root.val
+        """return_val = root.val
         if not root.right and not root.left:
             return return_val
             
@@ -52,5 +64,32 @@ class Solution(object):
             return_val = self.closestValue(root.right, target)
         
         return return_val
+        """
+        
+        bst_vals = self.get_ordered_bst_vals(root)
+        if len(bst_vals) == 1:
+            return root.val
+            
+        diff = sys.maxint
+        return_val = None
+        for val in bst_vals:
+            new_diff = abs(val - target)
+            
+            if new_diff < diff:
+                diff = new_diff
+                return_val = val
+        
+        return return_val
+        
+    def get_ordered_bst_vals(self, root, vals=[]):
+        if not root:
+            return
+        
+        vals.append(root.val)
+        self.get_ordered_bst_vals(root.right, vals)
+        self.get_ordered_bst_vals(root.left,vals)
+        
+        vals.sort()
+        return vals
         
         
